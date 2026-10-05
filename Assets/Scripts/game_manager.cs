@@ -10,9 +10,16 @@ public class game_manager : MonoBehaviour
 
     public TMP_Text texto_ponto_j1;
     public TMP_Text texto_ponto_j2;
+    public int pts_vitoria = 5;
+    public GameObject texto_vitoria;
 
     void Start()
     {
+        Time.timeScale = 1f;
+        if (texto_vitoria != null)
+        {
+            texto_vitoria.SetActive(false);
+        }
         atualizartexto();
     }
 
@@ -26,14 +33,18 @@ public class game_manager : MonoBehaviour
 
     public void aumentarptsjogador1()
     {
+        if (ptsJogador1 >= pts_vitoria || ptsJogador2 >= pts_vitoria) return;
         ptsJogador1++;
         atualizartexto();
+        VerificarVitoria();
     }
 
     public void aumentarptsjogador2()
-    {
+    {   
+        if (ptsJogador1 >= pts_vitoria || ptsJogador2 >= pts_vitoria) return;
         ptsJogador2++;
         atualizartexto();
+        VerificarVitoria();
     }
 
     public void atualizartexto()
@@ -45,5 +56,17 @@ public class game_manager : MonoBehaviour
     void reiniciarPartida()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+    }
+    void VerificarVitoria()
+    {
+        if (ptsJogador1 >= pts_vitoria || ptsJogador2 >= pts_vitoria)
+        {
+            if (texto_vitoria != null)
+            {
+                texto_vitoria.SetActive(true);
+            }
+            Time.timeScale = 0f;
+        }
     }
 }
