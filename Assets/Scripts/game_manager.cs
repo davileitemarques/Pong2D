@@ -12,6 +12,8 @@ public class game_manager : MonoBehaviour
     public TMP_Text texto_ponto_j2;
     public int pts_vitoria = 5;
     public GameObject texto_vitoria;
+    public AudioSource marcando_ponto;
+    public GameObject indicadoresPlacar;
 
     void Start()
     {
@@ -19,6 +21,10 @@ public class game_manager : MonoBehaviour
         if (texto_vitoria != null)
         {
             texto_vitoria.SetActive(false);
+        }
+        if (indicadoresPlacar != null)
+        {
+            indicadoresPlacar.SetActive(false);
         }
         atualizartexto();
     }
@@ -37,6 +43,7 @@ public class game_manager : MonoBehaviour
         ptsJogador1++;
         atualizartexto();
         VerificarVitoria();
+        Marcandoponto();
     }
 
     public void aumentarptsjogador2()
@@ -45,6 +52,7 @@ public class game_manager : MonoBehaviour
         ptsJogador2++;
         atualizartexto();
         VerificarVitoria();
+        Marcandoponto();
     }
 
     public void atualizartexto()
@@ -54,7 +62,11 @@ public class game_manager : MonoBehaviour
     }
 
     void reiniciarPartida()
-    {
+    {   
+        if (indicadoresPlacar != null)
+        {
+            indicadoresPlacar.SetActive(true);
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
@@ -67,6 +79,13 @@ public class game_manager : MonoBehaviour
                 texto_vitoria.SetActive(true);
             }
             Time.timeScale = 0f;
+        }
+    }
+    void Marcandoponto()
+    {
+        if (marcando_ponto != null)
+        {
+            marcando_ponto.Play();
         }
     }
 }
