@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class game_manager : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class game_manager : MonoBehaviour
     public int pts_vitoria = 5;
     public GameObject texto_vitoria;
     public AudioSource marcando_ponto;
-    public GameObject indicadoresPlacar;
+    public GameObject indicadorJogador1;
+    public GameObject indicadorJogador2;
+    private float cooldown = 2f;
 
     void Start()
     {
@@ -22,13 +25,17 @@ public class game_manager : MonoBehaviour
         {
             texto_vitoria.SetActive(false);
         }
-        if (indicadoresPlacar != null)
+        if (indicadorJogador1 != null)
         {
-            indicadoresPlacar.SetActive(false);
+            indicadorJogador1.SetActive(true);
+        }
+        if (indicadorJogador2 != null)
+        {
+            indicadorJogador2.SetActive(true);
         }
         atualizartexto();
+        StartCoroutine(EsconderIndicadores());
     }
-
     void Update()
     {
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
@@ -36,6 +43,23 @@ public class game_manager : MonoBehaviour
             reiniciarPartida();
         }
     }
+    IEnumerator EsconderIndicadores()
+    {
+        yield return new WaitForSeconds(cooldown);
+
+        if (ptsJogador1 < pts_vitoria && ptsJogador2 < pts_vitoria)
+        {
+            if (indicadorJogador1 != null)
+            {
+                indicadorJogador1.SetActive(false);
+            } 
+            if (indicadorJogador2 != null)
+            {
+                indicadorJogador2.SetActive(false);
+            }
+        }
+    }
+
 
     public void aumentarptsjogador1()
     {
@@ -63,10 +87,6 @@ public class game_manager : MonoBehaviour
 
     void reiniciarPartida()
     {   
-        if (indicadoresPlacar != null)
-        {
-            indicadoresPlacar.SetActive(true);
-        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Time.timeScale = 1f;
     }
@@ -77,6 +97,14 @@ public class game_manager : MonoBehaviour
             if (texto_vitoria != null)
             {
                 texto_vitoria.SetActive(true);
+            }
+            if (indicadorJogador1 != null)
+            {
+                indicadorJogador1.SetActive(true);
+            }
+            if (indicadorJogador2 != null)
+            {
+                indicadorJogador2.SetActive(true);
             }
             Time.timeScale = 0f;
         }
